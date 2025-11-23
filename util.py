@@ -1,23 +1,22 @@
-def isOdd(number):
+def is_odd(number):
 	if(number%2 == 1):
 		return True
 	return False
 	
-def isEven(number):
-	return not isOdd(number)
+def is_even(number):
+	return not is_odd(number)
 	
-def getPosSum():
+def get_pos_sum():
 	return get_pos_x() + get_pos_y()
 	
-def isPosOdd():
-	return isOdd(getPosSum())	
+def is_pos_odd():
+	return is_odd(get_pos_sum())	
 	
-def isPosEven():
-	return isEven(getPosSum())
+def is_pos_even():
+	return is_even(get_pos_sum())
 	
-def needTill(item) :
+def needs_till(item) :
 	if(item==Entities.Carrot or item==Entities.Pumpkin):
-		groundType = get_ground_type()
-		if(not groundType==Grounds.Soil):
+		if(not get_ground_type()==Grounds.Soil):
 			return True
 	return False

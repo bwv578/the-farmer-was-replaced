@@ -1,19 +1,19 @@
 import util
 
-def aPlant(item):
-	if(util.needTill(item)):
+def a_plant(item):
+	if(util.needs_till(item)):
 		till()		
 	plant(item)
 	
 	
-def aHarvest(item):
+def a_harvest(item):
 	if(can_harvest()):
 		harvest()
-		aPlant(item)
+		a_plant(item)
 
 	elif(get_entity_type()==Entities.Dead_Pumpkin):
-		aPlant(item)
-		
+		a_plant(item)
+	
 
 				
 		

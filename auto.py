@@ -1,31 +1,31 @@
 import util
 import advanced
 
-def plantRow(item) : 
+def plant_row(item) : 
 	for i in range(get_world_size()):
-		advanced.aHarvest(item)
+		advanced.a_harvest(item)
 		move(North)
 
 
-def plantRowWithTrees(item) :
+def plant_row_with_trees(item) :
 	for i in range(get_world_size()):
 		target = item		
 		
-		if(util.isPosOdd()):
+		if(util.is_pos_odd()):
 			target = Entities.Tree
 					
-		advanced.aHarvest(target)
+		advanced.a_harvest(target)
 		move(North)
 		
 		
-def plantArea(items, withTrees=False) :
-	worldSize = get_world_size()
-	rows = range(worldSize)
+def plant_area(items, mix_trees=False) :
+	world_size = get_world_size()
+	rows = range(world_size)
 	
 	for r in rows:
-		if(withTrees):
-			plantRowWithTrees(items[r%len(items)])
+		if(mix_trees):
+			plant_row_with_trees(items[r%len(items)])
 		else:
-			plantRow(items[r%len(items)])
+			plant_row(items[r%len(items)])
 		
 		move(East)

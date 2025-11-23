@@ -1,8 +1,8 @@
 import auto
 
-pItems = [
+plant_items = [
 		Entities.Carrot,
-		#Entities.Grass,
+		Entities.Grass,
 		#Entities.Bush,
 		#Entities.Tree		
 ]
@@ -10,4 +10,4 @@ pItems = [
 clear()
 
 while True:
-	auto.plantArea(pItems, True)
+	auto.plant_area(plant_items, False)
