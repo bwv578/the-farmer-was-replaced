@@ -1,8 +1,5 @@
+import preset
 import auto
-
-clear()
-while not can_harvest():
-	print('ㅗ^^ㅗ')
 
 plan_1 = [
 	[Entities.Bush, [0, 0], [2, 2]],
@@ -17,10 +14,23 @@ plan_2 = [
 	[Entities.Grass, [0, 1], [3, 0]]
 ]
 
-auto.plant_blueprint(plan_1)
+plan_carrot = [
+	[Entities.Carrot, [0,0], [5, 5]]
+]
+
+while not can_harvest():
+	entity = get_entity_type()
+	if(entity==None or entity==Entities.Dead_Pumpkin):
+		plant(Entities.Grass)
+	print('빨리좀 자라라')
+
+#preset.all_pumpkin()
+	
+#while True:
+	#auto.plant_blueprint(plan_1)
+	#auto.plant_blueprint(plan_2)
+	#auto.plant_blueprint(plan_carrot)
+	#auto.plant_trees(Entities.Carrot)
 
 clear()
-while not can_harvest():
-	print('ㅗ^^')
-
-auto.plant_blueprint(plan_2)
+preset.carrot_and_tree()

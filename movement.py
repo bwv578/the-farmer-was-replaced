@@ -1,5 +1,20 @@
 import util
 	
+def get_dir(x, y):
+	directions = []
+	
+	if(util.is_negative(get_pos_x()-x)):
+		directions.append(East)
+	else:
+		directions.append(West)
+	
+	if(util.is_negative(get_pos_y()-y)):
+		directions.append(North)
+	else:
+		directions.append(South)
+	
+	return directions	
+	
 def go_x(x):
 	diff = x-get_pos_x()
 	reverse = util.is_negative(diff)
