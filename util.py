@@ -25,21 +25,24 @@ def abs(number):
 		return number * -1
 	else:
 		return number
-		
-def flip_dir(dir):
-	if(dir == East):
-		return West
-	elif(dir == West):
-		return East
-	elif(dir == North):
-		return South
-	else:
-		return North
-	
-def needs_till(item) :
-	if(item==Entities.Carrot or item==Entities.Pumpkin):
-		if(not get_ground_type()==Grounds.Soil):
-			return True
-	return False
 
+flip = {
+	East:West,
+	West:East, 
+	North:South, 
+	South:North
+}
+
+needs_till = {
+	Entities.Carrot: Grounds.Grassland,
+	Entities.Pumpkin: Grounds.Grassland,
+	Entities.Grass: Grounds.Soil,
+	Entities.Bush: None,
+	Entities.Dead_Pumpkin: None,
+	Entities.Cactus: Grounds.Grassland,
+	Entities.Tree: None,
+	Entities.Sunflower: Grounds.Grassland
+}
+
+	
 	

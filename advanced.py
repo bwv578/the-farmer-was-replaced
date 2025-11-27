@@ -1,8 +1,8 @@
 import util
 
 def a_plant(item):
-	if(util.needs_till(item)):
-		till()		
+	if(util.needs_till[item]==get_ground_type()):
+		till()
 	plant(item)
 
 
