@@ -11,18 +11,24 @@ def pray():
 	
 def all_pumpkin():
 	blueprint = [
-		[Entities.Pumpkin, [0, 0], [15, 15]]
-	]
-	
+		{
+			'entity': Entities.Pumpkin, 
+			'start': [0, 0],
+			'end': [15, 15]
+		}
+	]	
 	while True:
 		auto.plant_blueprint(blueprint)
 
 
 def all_carrot():
-	lueprint = [
-		[Entities.Carrot, [0, 0], [15, 15]]
+	blueprint = [
+		{
+			'entity': Entities.Carrot,
+			'start': [0, 0],
+			'end': [15, 15]
+		}
 	]
-	
 	while True:
 		auto.plant_blueprint(blueprint)
 
