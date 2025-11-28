@@ -20,22 +20,24 @@ def harvest_all():
 		move(North)
 
 
-def plant_row(item, len, dir) : 	
-	for i in range(len):
+def plant_row(item, len, dir) :  	
+	for i in range(len-1):
 		advanced.a_harvest(item)
-				
-		if(not i==len-1):
-			move(dir)
+		move(dir)
+	advanced.a_harvest(item)
 
 			
 def plant_row_trees(len, dir) :
-	for i in range(len):
+	for i in range(len-1):
 		if(util.is_pos_odd()):
 			advanced.a_harvest(Entities.Tree)
 		else:
 			advanced.a_harvest(Entities.Bush)
-		if(not i==len-1):
-			move(dir)
+		move(dir)
+	if(util.is_pos_odd()):
+		advanced.a_harvest(Entities.Tree)
+	else:
+		advanced.a_harvest(Entities.Bush)
 
 
 def plant_area(item, start, end) :
@@ -67,6 +69,7 @@ def plant_area(item, start, end) :
 	
 	shortest_dist = routes_start[0][1] + routes_start[1][1]
 	shortest_idx = 0
+	
 	for i in range(3):
 		route = corner_routes[i+1]
 		dist = route[0][1]+route[1][1]
@@ -84,15 +87,18 @@ def plant_area(item, start, end) :
 	width = util.abs(start[0] - end[0]) + 1
 	height = util.abs(start[1] - end[1]) + 1
 	
-	for r in range(height):
+	for r in range(height-1):
 		if(item==Entities.Tree):
 			plant_row_trees(width, dirs[0])
 		else:
 			plant_row(item, width, dirs[0])
-		
 		dirs[0] = util.flip[dirs[0]]
-		if(not r==height-1):
-			move(dirs[1])
+		move(dirs[1])
+	if(item==Entities.Tree):
+		plant_row_trees(width, dirs[0])
+	else:
+		plant_row(item, width, dirs[0])	
+	dirs[0] = util.flip[dirs[0]]
 		
 
 def plant_blueprint(blueprint):	
