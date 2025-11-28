@@ -33,6 +33,23 @@ flip = {
 	South:North
 }
 
+
+turn = {
+	'cw': {
+		East: South,
+		South: West,
+		West: North,
+		North: East
+	},
+	'ccw': {
+		East: North,
+		North: West,
+		West: South,
+		South: East
+	}
+}
+
+
 needs_till = {
 	Entities.Carrot: Grounds.Grassland,
 	Entities.Pumpkin: Grounds.Grassland,
