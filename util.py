@@ -30,18 +30,21 @@ flip = {
 	East:West,
 	West:East, 
 	North:South, 
-	South:North
+	South:North,
+	'left':'right',
+	'right':'left',
+	None:None
 }
 
 
 turn = {
-	'cw': {
+	'right': {
 		East: South,
 		South: West,
 		West: North,
 		North: East
 	},
-	'ccw': {
+	'left': {
 		East: North,
 		North: West,
 		West: South,
@@ -60,6 +63,3 @@ needs_till = {
 	Entities.Tree: None,
 	Entities.Sunflower: Grounds.Grassland
 }
-
-	
-	

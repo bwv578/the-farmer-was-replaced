@@ -4,8 +4,6 @@ def a_plant(item):
 	if(util.needs_till[item]==get_ground_type()):
 		till()
 	plant(item)
-	use_item(Items.Fertilizer)
-
 
 def a_harvest(item):
 	if(can_harvest()):

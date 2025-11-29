@@ -1,6 +1,3 @@
-import auto
-
-
 all_pumpkin = [
 	{
 		'entity': Entities.Pumpkin, 

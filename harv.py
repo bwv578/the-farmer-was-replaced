@@ -102,6 +102,5 @@ def plant_area(item, start, end) :
 		
 
 def plant_blueprint(blueprint):	
-	for i in range(len(blueprint)):
-		plan = blueprint[i]	
+	for plan in blueprint:
 		plant_area(plan['entity'], plan['start'], plan['end'])

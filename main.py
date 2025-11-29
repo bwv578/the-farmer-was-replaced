@@ -1,14 +1,17 @@
 import preset
-import auto
+import harv
 import maze
+
+import advanced
 
 
 #auto.pray()
-
+maze.solve('right')
 while True:
-#	auto.plant_blueprint(preset.complex_16x16)
-#	auto.plant_blueprint(preset.complex_22x22)
-#	auto.plant_blueprint(preset.all_carrot)
-#	auto.plant_blueprint(preset.all_pumpkin)
-	maze.open()
-	maze.solve()
+	harv.plant_blueprint(preset.complex_16x16)
+	harv.plant_blueprint(preset.complex_22x22)
+	harv.plant_blueprint(preset.all_carrot)
+	harv.plant_blueprint(preset.all_pumpkin)
+	
+	#maze.open()
+	#maze.solve()
