@@ -17,5 +17,4 @@ import advanced
 
 maze.open()
 maze_map = maze.explore()
-print(maze_map)
-
+print('rslt:', maze_map)

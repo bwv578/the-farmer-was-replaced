@@ -1,0 +1,2 @@
+global tasks
+tasks = {}

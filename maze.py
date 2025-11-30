@@ -1,5 +1,6 @@
 import util
 import advanced
+import glob
 
 
 def open():
@@ -67,16 +68,26 @@ def back_to_parent(forward):
 		back_fwd = scan(back_fwd)[0]
 		move(back_fwd)
 			
-			
+
+
 def explore(parent=None, forward=None, node_table=None):
-	is_root = parent==None
 	
+	subtask_addr = (get_pos_x(), get_pos_y())
+	is_subtask = subtask_addr in glob.tasks
+	if(is_subtask):
+		task = glob.tasks[subtask_addr]
+		parent = task['parent']
+		forward = task['fwd']
+	
+	is_root = parent==None
 	if(is_root):
 		set_root()
-		node_table = {}
 		
 	cur_fwd = forward
-	
+	child_drones = []
+	if(node_table==None):
+		node_table = {}
+		
 	while True:
 		dirs = scan(cur_fwd)
 		
@@ -85,8 +96,14 @@ def explore(parent=None, forward=None, node_table=None):
 			node_table[cur_pos] = parent
 			
 			for dir in dirs:
-				move(dir)				
-				explore(cur_pos, dir, node_table)
+				move(dir)
+				if(num_drones() < max_drones()):
+					new_task_addr = (get_pos_x(), get_pos_y())
+					glob.tasks[new_task_addr] = {'parent': cur_pos, 'fwd': dir}
+					child_drones.append(spawn_drone(explore))
+					move(util.flip[dir])
+				else:
+					explore(cur_pos, dir, node_table)
 				
 			if(not is_root):
 				move(util.flip[cur_fwd])
@@ -95,16 +112,22 @@ def explore(parent=None, forward=None, node_table=None):
 			break
 				
 		elif(len(dirs) == 0):
-			end_point = (get_pos_x(), get_pos_y())
+			end_node = (get_pos_x(), get_pos_y())
 			back_to_parent(cur_fwd)
-			node_table[end_point] = parent
+			node_table[end_node] = parent
 			
 			break
 			
 		else:
 			cur_fwd = dirs[0]
 			move(cur_fwd)
-			
-			
-	if(is_root):
-		return node_table
+	
+	for drone in child_drones:
+		sub_nodes = wait_for(drone)
+		for c in sub_nodes:
+			node_table[c] = sub_nodes[c]
+	
+	if(is_subtask):
+		glob.tasks.pop(subtask_addr)
+	
+	return node_table
