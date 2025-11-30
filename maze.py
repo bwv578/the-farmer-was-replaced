@@ -47,7 +47,7 @@ def is_node():
 	return False
 
 
-def init():
+def set_root():
 	forward = North
 	while not is_wall_beside(forward, 'left'):
 		move(West)
@@ -68,21 +68,26 @@ def back_to_parent(forward):
 		move(back_fwd)
 		
 
-def explore(parent, forward, is_head_node=True):
+def explore(parent=None, forward=None):
+	is_root = parent==None
+	
+	if(is_root):
+		set_root()
+		
 	cur_fwd = forward
-
+	
 	while True:
 		dirs = scan(cur_fwd)
 		
-		if(len(dirs) > 2 or (len(dirs)==2 and not is_head_node)):
+		if(len(dirs) > 2 or (len(dirs)==2 and not is_root)):
 			cur_pos = (get_pos_x(), get_pos_y())
 			node = {'pos':cur_pos, 'parent':parent, 'childs': {}}
 			
 			for dir in dirs:
 				move(dir)
-				node['childs'][dir] = explore(cur_pos, dir, False)
+				node['childs'][dir] = explore(cur_pos, dir)
 
-			if(not is_head_node):
+			if(not is_root):
 				move(util.flip[cur_fwd])
 				back_to_parent(cur_fwd)
 				
@@ -96,8 +101,3 @@ def explore(parent, forward, is_head_node=True):
 		else:
 			cur_fwd = dirs[0]
 			move(cur_fwd)
-
-
-init()
-node_map = explore(None, None)
-print(node_map)

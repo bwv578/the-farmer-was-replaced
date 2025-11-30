@@ -84,8 +84,8 @@ def plant_area(item, start, end) :
 	movement.go_routes(routes_start)
 	
 	dirs = movement.get_dir(end[0], end[1])
-	width = util.abs(start[0] - end[0]) + 1
-	height = util.abs(start[1] - end[1]) + 1
+	width = abs(start[0] - end[0]) + 1
+	height = abs(start[1] - end[1]) + 1
 	
 	for r in range(height-1):
 		if(item==Entities.Tree):

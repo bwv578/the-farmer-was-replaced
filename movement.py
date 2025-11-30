@@ -18,7 +18,7 @@ def get_dir(x, y):
 
 	
 def get_route(forward_dir, diff):
-	dist = util.abs(diff)
+	dist = abs(diff)
 	reverse = util.is_negative(diff)
 	has_short_cut = dist > get_world_size()/2
 	

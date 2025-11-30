@@ -6,12 +6,16 @@ import advanced
 
 
 #auto.pray()
-maze.solve('right')
-while True:
-	harv.plant_blueprint(preset.complex_16x16)
-	harv.plant_blueprint(preset.complex_22x22)
-	harv.plant_blueprint(preset.all_carrot)
-	harv.plant_blueprint(preset.all_pumpkin)
+#while True:
+	#harv.plant_blueprint(preset.complex_16x16)
+	#harv.plant_blueprint(preset.complex_22x22)
+	#harv.plant_blueprint(preset.all_carrot)
+	#harv.plant_blueprint(preset.all_pumpkin)
 	
 	#maze.open()
 	#maze.solve()
+
+maze.open()
+maze_map = maze.explore()
+print(maze_map)
+

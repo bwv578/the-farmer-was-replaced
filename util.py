@@ -20,11 +20,6 @@ def is_negative(number):
 		return True
 	return False
 
-def abs(number):
-	if(number < 0):
-		return number * -1
-	else:
-		return number
 
 flip = {
 	East:West,
