@@ -66,13 +66,14 @@ def back_to_parent(forward):
 	while not is_node():
 		back_fwd = scan(back_fwd)[0]
 		move(back_fwd)
-		
-
-def explore(parent=None, forward=None):
+			
+			
+def explore(parent=None, forward=None, node_table=None):
 	is_root = parent==None
 	
 	if(is_root):
 		set_root()
+		node_table = {}
 		
 	cur_fwd = forward
 	
@@ -81,23 +82,29 @@ def explore(parent=None, forward=None):
 		
 		if(len(dirs) > 2 or (len(dirs)==2 and not is_root)):
 			cur_pos = (get_pos_x(), get_pos_y())
-			node = {'pos':cur_pos, 'parent':parent, 'childs': {}}
+			node_table[cur_pos] = parent
 			
 			for dir in dirs:
-				move(dir)
-				node['childs'][dir] = explore(cur_pos, dir)
-
+				move(dir)				
+				explore(cur_pos, dir, node_table)
+				
 			if(not is_root):
 				move(util.flip[cur_fwd])
 				back_to_parent(cur_fwd)
 				
-			return node
+			break
 				
 		elif(len(dirs) == 0):
 			end_point = (get_pos_x(), get_pos_y())
 			back_to_parent(cur_fwd)
-			return {'pos': end_point, 'parent': parent}
+			node_table[end_point] = parent
+			
+			break
 			
 		else:
 			cur_fwd = dirs[0]
 			move(cur_fwd)
+			
+			
+	if(is_root):
+		return node_table
