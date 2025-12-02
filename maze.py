@@ -5,7 +5,7 @@ import glob
 
 def open():
 	advanced.a_harvest(Entities.Bush)
-	substance = get_world_size() * 2**(num_unlocked(Unlocks.Mazes) - 3)
+	substance = get_world_size() * 2**(num_unlocked(Unlocks.Mazes) - 2)
 	use_item(Items.Weird_Substance, substance)
 
 	
@@ -69,7 +69,6 @@ def back_to_parent(forward):
 		move(back_fwd)
 			
 
-
 def explore(parent=None, forward=None, node_table=None):
 	
 	subtask_addr = (get_pos_x(), get_pos_y())
@@ -93,7 +92,7 @@ def explore(parent=None, forward=None, node_table=None):
 		
 		if(len(dirs) > 2 or (len(dirs)==2 and not is_root)):
 			cur_pos = (get_pos_x(), get_pos_y())
-			node_table[cur_pos] = parent
+			node_table[cur_pos] = (parent, forward)
 			
 			for dir in dirs:
 				move(dir)
@@ -107,15 +106,14 @@ def explore(parent=None, forward=None, node_table=None):
 				
 			if(not is_root):
 				move(util.flip[cur_fwd])
-				back_to_parent(cur_fwd)
-				
+				if not is_subtask:
+					back_to_parent(cur_fwd)
 			break
 				
 		elif(len(dirs) == 0):
 			end_node = (get_pos_x(), get_pos_y())
 			back_to_parent(cur_fwd)
-			node_table[end_node] = parent
-			
+			node_table[end_node] = (parent, forward)
 			break
 			
 		else:
@@ -126,8 +124,45 @@ def explore(parent=None, forward=None, node_table=None):
 		sub_nodes = wait_for(drone)
 		for c in sub_nodes:
 			node_table[c] = sub_nodes[c]
-	
-	if(is_subtask):
-		glob.tasks.pop(subtask_addr)
-	
+
 	return node_table
+	
+	
+def run_paths(paths):
+	for path in paths:
+		if(path == None):
+			break
+		move(path)
+		while not is_node():
+			scans = scan(path)
+			if(len(scans)==0):
+				break
+			path = scans[0]
+			move(path)
+	
+	
+def solve_node(node_table):
+	set_root()
+
+	cur_super = [(get_pos_x(), get_pos_y())]
+	trs_super = [measure()]
+	
+	cur_to_fork = []
+	trs_to_fork = []
+	
+	while cur_super != trs_super:
+		if(cur_super[0] != None):
+			cur_super = node_table[cur_super[0]]
+			cur_to_fork.append(util.flip[cur_super[1]])
+		if(trs_super[0] != None):
+			trs_super = node_table[trs_super[0]]
+			trs_to_fork.append(trs_super[1])
+	
+	fork_to_trs = util.mirror(trs_to_fork)
+	fork_to_trs.remove(fork_to_trs[0])
+	
+	run_paths(cur_to_fork)
+	run_paths(fork_to_trs)
+	
+	print('보물 여깄다')
+	do_a_flip()	

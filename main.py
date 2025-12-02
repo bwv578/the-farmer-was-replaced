@@ -15,6 +15,10 @@ import advanced
 	#maze.open()
 	#maze.solve()
 
-maze.open()
-maze_map = maze.explore()
-print('rslt:', maze_map)
+#maze.open()
+
+for i in range(5):
+	maze.open()
+	maze_map = maze.explore()
+	maze.solve_node(maze_map)
+	harvest()
