@@ -34,7 +34,7 @@ flip = {
 
 def mirror(lizt):
 	leng = len(lizt)
-	sum_edges = len(lizt) - 1
+	sum_edges = leng - 1
 	for i in range(leng//2):
 		lizt[i], lizt[sum_edges-i] = lizt[sum_edges-i], lizt[i]
 	return lizt

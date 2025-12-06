@@ -1,6 +1,7 @@
 import preset
 import harv
 import maze
+import glob
 
 import advanced
 
@@ -16,9 +17,17 @@ import advanced
 	#maze.solve()
 
 #maze.open()
-
-for i in range(5):
+	
+for i in range(50):
 	maze.open()
 	maze_map = maze.explore()
 	maze.solve_node(maze_map)
+	if((get_pos_x(), get_pos_y())==measure()):
+		quick_print('성공')
+	else:
+		quick_print('실패')
 	harvest()
+	
+#maze_map = maze.explore()
+#maze.solve_node(maze_map)
+#harvest()

@@ -59,8 +59,6 @@ def set_root():
 			forward = util.turn[util.flip['left']][forward]
 		move(forward)
 
-	return {'pos':(get_pos_x(), get_pos_y()), 'fwd':forward}
-	
 
 def back_to_parent(forward):
 	back_fwd = util.flip[forward]
@@ -69,7 +67,7 @@ def back_to_parent(forward):
 		move(back_fwd)
 			
 
-def explore(parent=None, forward=None, node_table=None):
+def explore(parent=None, forward=None, node_table={}):
 	
 	subtask_addr = (get_pos_x(), get_pos_y())
 	is_subtask = subtask_addr in glob.tasks
@@ -84,8 +82,6 @@ def explore(parent=None, forward=None, node_table=None):
 		
 	cur_fwd = forward
 	child_drones = []
-	if(node_table==None):
-		node_table = {}
 		
 	while True:
 		dirs = scan(cur_fwd)
@@ -96,18 +92,26 @@ def explore(parent=None, forward=None, node_table=None):
 			
 			for dir in dirs:
 				move(dir)
-				if(num_drones() < max_drones()):
-					new_task_addr = (get_pos_x(), get_pos_y())
-					glob.tasks[new_task_addr] = {'parent': cur_pos, 'fwd': dir}
-					child_drones.append(spawn_drone(explore))
-					move(util.flip[dir])
-				else:
+				new_task_addr = (get_pos_x(), get_pos_y())
+				glob.tasks[new_task_addr] = {'parent': cur_pos, 'fwd': dir}
+				spawn_attempt = spawn_drone(explore)
+				
+				if(spawn_attempt==None):
+					glob.tasks.pop(new_task_addr)
 					explore(cur_pos, dir, node_table)
+				else:
+					child_drones.append(spawn_attempt)
+					move(util.flip[dir])
 				
 			if(not is_root):
 				move(util.flip[cur_fwd])
 				if not is_subtask:
 					back_to_parent(cur_fwd)
+			
+			for drone in child_drones:
+				sub_nodes = wait_for(drone)
+				for node in sub_nodes:
+					node_table[node] = sub_nodes[node]
 			break
 				
 		elif(len(dirs) == 0):
@@ -120,11 +124,9 @@ def explore(parent=None, forward=None, node_table=None):
 			cur_fwd = dirs[0]
 			move(cur_fwd)
 	
-	for drone in child_drones:
-		sub_nodes = wait_for(drone)
-		for c in sub_nodes:
-			node_table[c] = sub_nodes[c]
-
+	if(is_root):
+		glob.tasks = {}
+	
 	return node_table
 	
 	
@@ -142,14 +144,17 @@ def run_paths(paths):
 	
 	
 def solve_node(node_table):
+	test()
 	set_root()
 
 	cur_super = [(get_pos_x(), get_pos_y())]
 	trs_super = [measure()]
+	quick_print('solve start..  cur_pos:', cur_super[0], '  isNodeHead?:',node_table[cur_super[0]]==(None,None))
 	
 	cur_to_fork = []
 	trs_to_fork = []
 	
+	# 여태 그냥 루트에서 시작해서 오류 안난듯	다른위치면 포크 잘못잡아서 오류날거임
 	while cur_super != trs_super:
 		if(cur_super[0] != None):
 			cur_super = node_table[cur_super[0]]
@@ -163,6 +168,23 @@ def solve_node(node_table):
 	
 	run_paths(cur_to_fork)
 	run_paths(fork_to_trs)
+	quick_print('cur_to_fork:', cur_to_fork)
+	quick_print('fork_to_trs:', fork_to_trs)
 	
-	print('보물 여깄다')
-	do_a_flip()	
+	#print('보물 여깄다')
+	#do_a_flip()	
+
+	
+	
+def test(hand='left'):
+	forward = North
+	
+	while not is_wall_beside(forward, hand):
+		move(util.turn[hand][forward])
+		
+	for i in range(50):
+		if(not is_wall_beside(forward, hand)):
+			forward = util.turn[hand][forward]
+		elif(not can_move(forward)):
+			forward = util.turn[util.flip[hand]][forward]
+		move(forward)
