@@ -18,16 +18,13 @@ import advanced
 
 #maze.open()
 	
+	
+# test - 랜덤위치에서 시작 x50회
 for i in range(50):
 	maze.open()
 	maze_map = maze.explore()
-	maze.solve_node(maze_map)
-	if((get_pos_x(), get_pos_y())==measure()):
-		quick_print('성공')
-	else:
-		quick_print('실패')
-	harvest()
 	
-#maze_map = maze.explore()
-#maze.solve_node(maze_map)
-#harvest()
+	maze.go_random_loc()
+	print('여기서 시작')
+	
+	maze.solve_node(maze_map)

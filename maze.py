@@ -88,7 +88,7 @@ def explore(parent=None, forward=None, node_table={}):
 		
 		if(len(dirs) > 2 or (len(dirs)==2 and not is_root)):
 			cur_pos = (get_pos_x(), get_pos_y())
-			node_table[cur_pos] = (parent, forward)
+			node_table[cur_pos] = (parent, forward, util.flip[cur_fwd])
 			
 			for dir in dirs:
 				move(dir)
@@ -116,8 +116,9 @@ def explore(parent=None, forward=None, node_table={}):
 				
 		elif(len(dirs) == 0):
 			end_node = (get_pos_x(), get_pos_y())
-			back_to_parent(cur_fwd)
-			node_table[end_node] = (parent, forward)
+			if not is_subtask:
+				back_to_parent(cur_fwd)
+			node_table[end_node] = (parent, forward, util.flip[cur_fwd])
 			break
 			
 		else:
@@ -130,53 +131,60 @@ def explore(parent=None, forward=None, node_table={}):
 	return node_table
 	
 	
-def run_paths(paths):
-	for path in paths:
-		if(path == None):
-			break
-		move(path)
+def run_paths(paths, target):
+	cur_pos = (get_pos_x(), get_pos_y())
+	while cur_pos != target:
+		dir = paths[cur_pos]
+		if(dir==None):
+			break		
+		move(dir)
 		while not is_node():
-			scans = scan(path)
+			scans = scan(dir)
 			if(len(scans)==0):
 				break
-			path = scans[0]
-			move(path)
-	
+			dir = scans[0]
+			move(dir)
+		cur_pos = (get_pos_x(), get_pos_y())
+		
 	
 def solve_node(node_table):
-	test()
 	set_root()
 
 	cur_super = [(get_pos_x(), get_pos_y())]
 	trs_super = [measure()]
-	quick_print('solve start..  cur_pos:', cur_super[0], '  isNodeHead?:',node_table[cur_super[0]]==(None,None))
-	
-	cur_to_fork = []
-	trs_to_fork = []
-	
-	# 여태 그냥 루트에서 시작해서 오류 안난듯	다른위치면 포크 잘못잡아서 오류날거임
-	while cur_super != trs_super:
-		if(cur_super[0] != None):
-			cur_super = node_table[cur_super[0]]
-			cur_to_fork.append(util.flip[cur_super[1]])
-		if(trs_super[0] != None):
-			trs_super = node_table[trs_super[0]]
-			trs_to_fork.append(trs_super[1])
-	
-	fork_to_trs = util.mirror(trs_to_fork)
-	fork_to_trs.remove(fork_to_trs[0])
-	
-	run_paths(cur_to_fork)
-	run_paths(fork_to_trs)
-	quick_print('cur_to_fork:', cur_to_fork)
-	quick_print('fork_to_trs:', fork_to_trs)
-	
-	#print('보물 여깄다')
-	#do_a_flip()	
 
+	cur_to_fork = {}
+	fork_to_trs = {}
+	fork = None
 	
+	while True :
+		if cur_super[0] in fork_to_trs:
+			fork = cur_super[0]
+			addr = cur_super[0]
+			cur_super = node_table[cur_super[0]]
+			cur_to_fork[addr] = cur_super[2]
+			break
+		if trs_super[0] in cur_to_fork:
+			fork = trs_super[0]
+			trs_super = node_table[trs_super[0]]
+			fork_to_trs[trs_super[0]] = trs_super[1]
+			break
+			
+		if cur_super[0] != None:
+			addr = cur_super[0]
+			cur_super = node_table[cur_super[0]]
+			cur_to_fork[addr] = cur_super[2]
+		if trs_super[0] != None:
+			trs_super = node_table[trs_super[0]]
+			fork_to_trs[trs_super[0]] = trs_super[1]
+			
+	run_paths(cur_to_fork, fork)
+	run_paths(fork_to_trs, measure())
+	print('보물 여깄다')
 	
-def test(hand='left'):
+
+def go_random_loc():
+	hand = 'left'
 	forward = North
 	
 	while not is_wall_beside(forward, hand):
